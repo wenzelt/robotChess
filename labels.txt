@@ -1,0 +1,12 @@
+0 Knight B
+1 Kings B
+2 Queens B 
+3 Rook B
+4 Pawn B 
+5 Bishop B 
+6 Empty
+7 Bishop R
+8 Kings R
+9 Knights R
+10 Rooks R
+11 Pawns R
