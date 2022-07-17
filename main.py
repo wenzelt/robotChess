@@ -71,7 +71,7 @@ def get_corners():
         print("No Checkerboard Found")
 
 
-def slice_image(corners, cam_image_in_bytes, write_to_disk: bool) -> list[list]:
+def slice_image(corners, cam_image_in_bytes) -> list[list]:
     img_np = np.frombuffer(cam_image_in_bytes, dtype='uint8')
     img = cv2.imdecode(img_np, cv2.IMREAD_COLOR)
     square_pixel = int(corners[1][1] - corners[0][1])
@@ -84,47 +84,26 @@ def slice_image(corners, cam_image_in_bytes, write_to_disk: bool) -> list[list]:
     img_cut = img[min_y:max_y, min_x:max_x]
     img_square = cv2.resize(img_cut, (square_pixel * 8, square_pixel * 8))
 
-    squares = []
-    alpha_desc = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-    numbers = [8, 7, 6, 5, 4, 3, 2, 1]
-    counter_a = 0
-    counter_b = 0
-
     field_images = [
-        [{'field': f'{alpha_desc[int(column / 85)], numbers[int(row / 85)]}',
-          'image': img_square[row:row + square_pixel, column:column + square_pixel, :],
-          "prediction": ""} for column in
-         range(0, img_square.shape[1], square_pixel)] for
+        [
+            {'image': img_square[row:row + square_pixel, column:column + square_pixel, :], }
+            for column in
+            range(0, img_square.shape[1], square_pixel)] for
         row in range(0, img_square.shape[0], square_pixel)]
 
-    # if write_to_disk:
-    #     for r in range(0, img_square.shape[0], square_pixel):
-    #         for c in range(0, img_square.shape[1], square_pixel):
-    #             field = f'{alpha_desc[counter_b]}{numbers[counter_a]}'
-    #
-    #             cv2.imwrite(f"./squares/{field}.png",
-    #                         img_square[r:r + square_pixel, c:c + square_pixel, :])
-    #             counter_b += 1
-    #
-    #             counter_b = counter_b % 8
-    #         counter_a += 1
     return field_images
 
 
-def class_from_prediction(prediction):
-    CLASS_ARR = ["KB", "QB", "RB", "PB", "BB", "EF", "BR", "QR", 'KR', "RR", "PR"]
-
-    predicted_class = np.argmax(prediction, axis=1)
-    predicted_class = map(lambda x: CLASS_ARR[x], predicted_class)
-    print(predicted_class)
+def class_from_prediction(board_array):
+    CLASS_ARR = ["HB", "KB", "QB", "RB", "PB", 'BB', "E", "BR", "KR", 'HR', "RR", "PR"]
+    predicted_class = map(lambda x: CLASS_ARR[x], list(board_array))
     return predicted_class
 
 
-
 def predict_chesspieces(model, field):
-    flatten_list = [element for sublist in field for element in sublist]
+    flattened_list = [element for sublist in field for element in sublist]
     x = np.array([np.array(cv2.resize(image['image'], dsize=(224, 224), interpolation=cv2.INTER_CUBIC)) for image in
-                  flatten_list])
+                  flattened_list])
 
     normalized_image_array = (x.astype(np.float32) / 127.0) - 1
 
@@ -138,7 +117,8 @@ def predict_chesspieces(model, field):
 if __name__ == '__main__':
     image_bytes = download_image()
     corners = get_corners()
-    sliced_board = slice_image(corners, image_bytes, True)
+    sliced_board = slice_image(corners, image_bytes)
     model = load_model('fixtures/keras_model.h5')
     board_array = predict_chesspieces(model, sliced_board)
     print(str(board_array))
+    # board_labelled = class_from_prediction(board_array)
