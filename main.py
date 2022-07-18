@@ -1,3 +1,5 @@
+from typing import Optional
+
 import cv2
 import numpy as np
 import requests
@@ -9,17 +11,18 @@ from keras.models import load_model
 from fixtures.empty_chessboard import EMPTY_CHESSBOARD
 from fixtures.local_chessboard import LOCAL_CHESSBOARD
 
-LOCAL = True
+LOCAL = False
 DRAW_CORNERS = False
 
 
 def download_image() -> bytes:
-    with open("full_boards/chess_full2022-06-28 15:24:25.338598.png", "rb") as image:
+    with open("full_boards/chess_full2022-06-28 13:56:05.803477.png", "rb") as image:
         f = image.read()
 
     if LOCAL:
         return f
     URL = "https://lab.bpm.in.tum.de/img/high/url"
+
     try:
         print("sending request")
         url_endpoint_response = requests.get(URL, params={})
@@ -110,15 +113,15 @@ def predict_chesspieces(model, field):
     prediction = model.predict(normalized_image_array)
 
     board_array = np.reshape(np.argmax(prediction, axis=1), (8, 8))
-
     return board_array
 
 
 if __name__ == '__main__':
     image_bytes = download_image()
     corners = get_corners()
+
     sliced_board = slice_image(corners, image_bytes)
-    model = load_model('fixtures/keras_model.h5')
+    model = load_model('models/keras_model_low_epoch.h5')
     board_array = predict_chesspieces(model, sliced_board)
     print(str(board_array))
     # board_labelled = class_from_prediction(board_array)
