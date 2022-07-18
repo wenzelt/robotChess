@@ -2,6 +2,7 @@ name: robotChess
 channels:
   - menpo
   - defaults
+  - conda-forge
 dependencies:
   - python=3.10
   - numpy
