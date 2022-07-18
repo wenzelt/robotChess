@@ -8,6 +8,7 @@ import io
 from PIL import Image, ImageOps
 from keras.models import load_model
 
+from apiCheckApp.services import EchoService
 from fixtures.empty_chessboard import EMPTY_CHESSBOARD
 from fixtures.local_chessboard import LOCAL_CHESSBOARD
 
@@ -24,16 +25,16 @@ def download_image() -> bytes:
     URL = "https://lab.bpm.in.tum.de/img/high/url"
 
     try:
-        print("sending request")
+        EchoService.echo("sending request")
         url_endpoint_response = requests.get(URL, params={})
         img_endpoint_response = requests.get(url_endpoint_response.content, params={})
-        print("response received")
+        EchoService.echo("response received")
         if img_endpoint_response.status_code == 200:
-            print(f"status_code == {img_endpoint_response.status_code}")
+            EchoService.echo(f"status_code == {img_endpoint_response.status_code}")
             image_bytes = img_endpoint_response.content
             return image_bytes
         elif img_endpoint_response.status_code == 502:
-            print(f"status_code == {img_endpoint_response.status_code}")
+            EchoService.echo(f"status_code == {img_endpoint_response.status_code}")
             raise SystemExit()
         else:
             raise requests.exceptions.HTTPError
@@ -71,7 +72,7 @@ def get_corners():
         return corner_coords.squeeze()
 
     else:
-        print("No Checkerboard Found")
+        EchoService.echo("No Checkerboard Found")
 
 
 def slice_image(corners, cam_image_in_bytes) -> list[list]:
@@ -123,5 +124,5 @@ if __name__ == '__main__':
     sliced_board = slice_image(corners, image_bytes)
     model = load_model('models/keras_model_low_epoch.h5')
     board_array = predict_chesspieces(model, sliced_board)
-    print(str(board_array))
+    EchoService.echo(str(board_array))
     # board_labelled = class_from_prediction(board_array)
