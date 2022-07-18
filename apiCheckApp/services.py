@@ -1,10 +1,12 @@
-
 import logging
 
 logger = logging.getLogger(__name__)  # the __name__ resolve to "uicheckapp.services"
-                                      # This will load the uicheckapp logger
+
+
+# This will load the apiCheckApp logger
 
 class EchoService:
-  def echo(self, msg):
-    logger.info("echoing something from the uicheckapp logger")
-    print(msg)
+    @staticmethod
+    def echo(msg):
+        logger.info("echoing from apiCheckApp logger:")
+        print(msg)

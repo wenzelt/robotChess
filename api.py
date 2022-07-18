@@ -45,5 +45,5 @@ async def root():
     corners = get_corners()
     sliced_board = slice_image(corners, image_bytes)
     board_array = predict_chesspieces(model, sliced_board)
-    print(str(board_array))
+    EchoService.echo(str(board_array))
     return str(board_array)
