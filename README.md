@@ -19,3 +19,17 @@ conda env export | grep -v "^prefix: " > environment.yml
 ```bash
 conda env create -f environment.yml
 ```
+
+### Logging: 
+
+#### Root level logging levels:
+```
+logger.info()
+logger.warning()
+logger.error()
+```
+
+#### App level logging:
+```python
+EchoService.echo()
+```
