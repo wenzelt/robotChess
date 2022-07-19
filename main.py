@@ -11,7 +11,6 @@ from keras.models import load_model
 from apiCheckApp.services import EchoService
 from fixtures.empty_chessboard import EMPTY_CHESSBOARD
 from fixtures.local_chessboard import LOCAL_CHESSBOARD
-
 LOCAL = False
 DRAW_CORNERS = False
 

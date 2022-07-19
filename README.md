@@ -30,6 +30,6 @@ logger.error()
 ```
 
 #### App level logging:
-```python
+```
 EchoService.echo()
 ```
