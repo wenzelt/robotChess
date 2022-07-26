@@ -11,7 +11,7 @@ from keras.models import load_model
 from apiCheckApp.services import EchoService
 
 app = FastAPI()
-model = load_model('models/keras_model.h5', compile=False)
+model = load_model('models/blue_red_model.h5', compile=False)
 
 # setup loggers
 logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
