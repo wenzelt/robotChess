@@ -121,7 +121,7 @@ if __name__ == '__main__':
     corners = get_corners()
 
     sliced_board = slice_image(corners, image_bytes)
-    model = load_model('models/keras_model_low_epoch.h5')
+    model = load_model('models/blue_red_model.h5')
     board_array = predict_chesspieces(model, sliced_board)
     EchoService.echo(str(board_array))
     # board_labelled = class_from_prediction(board_array)
