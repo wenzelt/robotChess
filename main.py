@@ -11,12 +11,15 @@ from keras.models import load_model
 from apiCheckApp.services import EchoService
 from fixtures.empty_chessboard import EMPTY_CHESSBOARD
 from fixtures.local_chessboard import LOCAL_CHESSBOARD
+
 LOCAL = False
 DRAW_CORNERS = False
 
 
 def download_image() -> bytes:
     if LOCAL:
+        with open("full_boards/chess_full2022-06-28 13:56:05.803477.png", "rb") as image:
+            f = image.read()
         return f
     URL = "https://lab.bpm.in.tum.de/img/high/url"
 
