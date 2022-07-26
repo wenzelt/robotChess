@@ -16,9 +16,6 @@ DRAW_CORNERS = False
 
 
 def download_image() -> bytes:
-    with open("full_boards/chess_full2022-06-28 13:56:05.803477.png", "rb") as image:
-        f = image.read()
-
     if LOCAL:
         return f
     URL = "https://lab.bpm.in.tum.de/img/high/url"
