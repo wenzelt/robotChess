@@ -54,12 +54,12 @@ def slice_image(corners, cam_image_in_bytes) -> list[list]:
     img = cv2.imdecode(img_np, cv2.IMREAD_COLOR)
     square_pixel = int(corners[1][1] - corners[0][1])
     ru = np.array((corners[0][0] + square_pixel, corners[0][1] - square_pixel)).astype(int)
-    ld = np.array((corners[-1][0] - square_pixel , corners[-1][1] + square_pixel)).astype(int)
+    ld = np.array((corners[-1][0] - square_pixel, corners[-1][1] + square_pixel)).astype(int)
 
     min_x, max_y = ld
     max_x, min_y = ru
 
-    img_cut = img[min_y-10:max_y-10, min_x-10:max_x-10]
+    img_cut = img[min_y - 10:max_y - 10, min_x - 10:max_x - 10]
     img_square = cv2.resize(img_cut, (square_pixel * 8, square_pixel * 8))
 
     field_images = [
@@ -78,7 +78,7 @@ def class_from_prediction(board_array):
     return predicted_class
 
 
-def predict_chesspieces(model, field):
+def predict_chesspieces(model, field, reshape: tuple = (8, 8)):
     flattened_list = [element for sublist in field for element in sublist]
     x = np.array([np.array(cv2.resize(image['image'], dsize=(224, 224), interpolation=cv2.INTER_AREA)) for image in
                   flattened_list])
@@ -87,7 +87,7 @@ def predict_chesspieces(model, field):
 
     prediction = model.predict(normalized_image_array)
 
-    board_array = np.reshape(np.argmax(prediction, axis=1), (8, 8))
+    board_array = np.reshape(np.argmax(prediction, axis=1), reshape)
     return board_array
 
 
