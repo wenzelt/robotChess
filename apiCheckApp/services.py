@@ -5,6 +5,7 @@ logger = logging.getLogger(__name__)  # the __name__ resolve to "uicheckapp.serv
 
 # This will load the apiCheckApp logger
 
+
 class EchoService:
     @staticmethod
     def echo(msg):
