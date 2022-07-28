@@ -18,7 +18,7 @@ if __name__ == "__main__":
         [
             np.array(
                 cv2.resize(
-                    image["image"], dsize=(224, 224), interpolation=cv2.INTER_AREA
+                    image, dsize=(224, 224), interpolation=cv2.INTER_AREA
                 )
             )
             for image in flattened_list
@@ -34,5 +34,7 @@ if __name__ == "__main__":
     counter = 0
     for i in x:
         if flattened_list_predictions[counter] != 0:
-            cv2.imwrite(f"images/{counter}_{random.randint(0, 1000)}.png", i)
+            cv2.imwrite(f"images/unsorted/{counter}_{random.randint(0, 1000)}.png", i)
         counter += 1
+        if counter == 64:
+            break
