@@ -11,34 +11,9 @@ from keras.models import load_model
 from apiCheckApp.services import EchoService
 from fixtures.empty_chessboard import EMPTY_CHESSBOARD
 from fixtures.local_chessboard import LOCAL_CHESSBOARD
+from utility_functions.image_downloader import download_image
 
-LOCAL = False
 DRAW_CORNERS = False
-
-
-def download_image() -> bytes:
-    if LOCAL:
-        with open("full_boards/chess_full2022-06-28 13:56:05.803477.png", "rb") as image:
-            f = image.read()
-        return f
-    URL = "https://lab.bpm.in.tum.de/img/high/url"
-
-    try:
-        EchoService.echo("sending request")
-        url_endpoint_response = requests.get(URL, params={})
-        img_endpoint_response = requests.get(url_endpoint_response.content, params={})
-        EchoService.echo("response received")
-        if img_endpoint_response.status_code == 200:
-            EchoService.echo(f"status_code == {img_endpoint_response.status_code}")
-            image_bytes = img_endpoint_response.content
-            return image_bytes
-        elif img_endpoint_response.status_code == 502:
-            EchoService.echo(f"status_code == {img_endpoint_response.status_code}")
-            raise SystemExit()
-        else:
-            raise requests.exceptions.HTTPError
-    except requests.exceptions.Timeout:
-        print("Timeout exception")
 
 
 def get_corners():
@@ -79,12 +54,12 @@ def slice_image(corners, cam_image_in_bytes) -> list[list]:
     img = cv2.imdecode(img_np, cv2.IMREAD_COLOR)
     square_pixel = int(corners[1][1] - corners[0][1])
     ru = np.array((corners[0][0] + square_pixel, corners[0][1] - square_pixel)).astype(int)
-    ld = np.array((corners[-1][0] - square_pixel, corners[-1][1] + square_pixel)).astype(int)
+    ld = np.array((corners[-1][0] - square_pixel , corners[-1][1] + square_pixel)).astype(int)
 
     min_x, max_y = ld
     max_x, min_y = ru
 
-    img_cut = img[min_y:max_y, min_x:max_x]
+    img_cut = img[min_y-10:max_y-10, min_x-10:max_x-10]
     img_square = cv2.resize(img_cut, (square_pixel * 8, square_pixel * 8))
 
     field_images = [
@@ -105,7 +80,7 @@ def class_from_prediction(board_array):
 
 def predict_chesspieces(model, field):
     flattened_list = [element for sublist in field for element in sublist]
-    x = np.array([np.array(cv2.resize(image['image'], dsize=(224, 224), interpolation=cv2.INTER_CUBIC)) for image in
+    x = np.array([np.array(cv2.resize(image['image'], dsize=(224, 224), interpolation=cv2.INTER_AREA)) for image in
                   flattened_list])
 
     normalized_image_array = (x.astype(np.float32) / 127.0) - 1
@@ -121,7 +96,7 @@ if __name__ == '__main__':
     corners = get_corners()
 
     sliced_board = slice_image(corners, image_bytes)
-    model = load_model('models/blue_red_model.h5')
+    model = load_model('models/model_5000_blue_red.h5')
     board_array = predict_chesspieces(model, sliced_board)
     EchoService.echo(str(board_array))
     # board_labelled = class_from_prediction(board_array)
