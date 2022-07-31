@@ -72,7 +72,7 @@ if __name__ == "__main__":
     corners = get_corners()
 
     sliced_board = slice_image(corners, image_bytes)
-    model = load_model("models/model_5000_blue_red.h5")
+    model = load_model("models/model_all_classes_200.h5")
     board_array = predict_chesspieces(model, sliced_board)
     EchoService.echo(str(board_array))
     # board_labelled = class_from_prediction(board_array)

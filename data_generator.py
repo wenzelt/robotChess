@@ -36,5 +36,5 @@ if __name__ == "__main__":
         if flattened_list_predictions[counter] != 0:
             cv2.imwrite(f"images/unsorted/{counter}_{random.randint(0, 1000)}.png", i)
         counter += 1
-        if counter == 64:
+        if counter == 63:
             break
