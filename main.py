@@ -25,12 +25,12 @@ def slice_image(corner_coords, cam_image_in_bytes) -> list[list]:
     min_x, max_y = ld
     max_x, min_y = ru
 
-    img_cut = img[min_y - 10: max_y - 10, min_x - 10: max_x - 10]
+    img_cut = img[min_y - 10 : max_y - 10, min_x - 10 : max_x - 10]
     img_square = cv2.resize(img_cut, (square_pixel * 8, square_pixel * 8))
 
     field_images = [
         [
-            img_square[row: row + square_pixel, column: column + square_pixel, :]
+            img_square[row : row + square_pixel, column : column + square_pixel, :]
             for column in range(0, img_square.shape[1], square_pixel)
         ]
         for row in range(0, img_square.shape[0], square_pixel)
@@ -63,7 +63,7 @@ def predict_chesspieces(model, field, reshape: tuple = (8, 8)):
 
 
 def index_to_board_string(y, x):
-    columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+    columns = ["a", "b", "c", "d", "e", "f", "g", "h"]
     x = columns[x]
     return y + 1, x
 

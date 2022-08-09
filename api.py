@@ -9,8 +9,14 @@ from keras.models import load_model
 
 from apiCheckApp.services import EchoService
 from data_generator import save_images_to_disk
-from main import download_image, get_corners, slice_image, predict_chesspieces, get_random_free_space, \
-    get_random_pickup_space
+from main import (
+    download_image,
+    get_corners,
+    slice_image,
+    predict_chesspieces,
+    get_random_free_space,
+    get_random_pickup_space,
+)
 
 app = FastAPI()
 model = load_model("models/blue_red_model_200.h5", compile=False)
@@ -59,7 +65,7 @@ async def root():
 @app.get("/save_samples")
 async def save_samples():
     save_images_to_disk()
-    return {'success': True}
+    return {"success": True}
 
 
 @app.get("/next_move_to_free_space")
