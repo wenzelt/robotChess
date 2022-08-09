@@ -19,7 +19,7 @@ from main import (
 )
 
 app = FastAPI()
-model = load_model("models/blue_red_model_200.h5", compile=False)
+model = load_model("models/keras_all_classes_no_color.h5", compile=False)
 
 # setup loggers
 logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
