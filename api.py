@@ -8,7 +8,6 @@ from fastapi import FastAPI
 from keras.models import load_model
 
 from apiCheckApp.services import EchoService
-from data_generator import save_images_to_disk
 from main import (
     download_image,
     get_corners,
@@ -17,6 +16,7 @@ from main import (
     get_random_free_space,
     get_random_pickup_space,
 )
+from utility_functions.image_utils import save_images_to_disk
 
 COUNTER = 32
 
