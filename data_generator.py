@@ -10,6 +10,8 @@ from utility_functions.image_downloader import download_image
 model = load_model("models/model_5000_blue_red.h5")
 
 
+
+
 def save_images_to_disk() -> None:
     image = download_image()
     corners = get_corners()

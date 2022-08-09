@@ -8,7 +8,7 @@ from fastapi import FastAPI
 import logging
 
 from data_generator import save_images_to_disk
-from main import download_image, get_corners, slice_image, predict_chesspieces
+from main import download_image, get_corners, slice_image, predict_chesspieces, get_random_free_space
 from keras.models import load_model
 from apiCheckApp.services import EchoService
 
@@ -60,3 +60,14 @@ async def root():
 async def save_samples():
     save_images_to_disk()
     return {'success': True}
+
+
+@app.get("/next_move_to_free_space")
+async def next_move_to_free_space():
+    EchoService.echo("Starting recognition Workflow")
+    image_bytes = download_image()
+    corners = get_corners()
+    sliced_board = slice_image(corners, image_bytes)
+    board_array = predict_chesspieces(model, sliced_board)
+    y_free, x_free = get_random_free_space(board_array)
+    return {'y': y_free, 'x': x_free}
