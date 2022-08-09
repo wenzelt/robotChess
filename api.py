@@ -1,16 +1,16 @@
+import logging
 import random
 import string
 import time
 from urllib.request import Request
 
 from fastapi import FastAPI
-
-import logging
-
-from data_generator import save_images_to_disk
-from main import download_image, get_corners, slice_image, predict_chesspieces, get_random_free_space
 from keras.models import load_model
+
 from apiCheckApp.services import EchoService
+from data_generator import save_images_to_disk
+from main import download_image, get_corners, slice_image, predict_chesspieces, get_random_free_space, \
+    get_random_pickup_space
 
 app = FastAPI()
 model = load_model("models/blue_red_model_200.h5", compile=False)
@@ -70,4 +70,5 @@ async def next_move_to_free_space():
     sliced_board = slice_image(corners, image_bytes)
     board_array = predict_chesspieces(model, sliced_board)
     y_free, x_free = get_random_free_space(board_array)
-    return {'y': y_free, 'x': x_free}
+    y_pickup, x_pickup = get_random_pickup_space(board_array)
+    return str(x_free + y_free + x_pickup + y_pickup)
