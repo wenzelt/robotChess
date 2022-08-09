@@ -6,6 +6,8 @@ from urllib.request import Request
 from fastapi import FastAPI
 
 import logging
+
+from data_generator import save_images_to_disk
 from main import download_image, get_corners, slice_image, predict_chesspieces
 from keras.models import load_model
 from apiCheckApp.services import EchoService
@@ -56,7 +58,5 @@ async def root():
 
 @app.get("/save_samples")
 async def save_samples():
-    image_bytes = download_image()
-    corners = get_corners()
-    sliced_board = slice_image(corners, image_bytes)
+    save_images_to_disk()
     return {'success': True}
