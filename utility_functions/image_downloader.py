@@ -28,3 +28,4 @@ def download_image(url="https://lab.bpm.in.tum.de/img/high/url") -> bytes:
             raise requests.exceptions.HTTPError
     except requests.exceptions.Timeout:
         print("Timeout exception")
+

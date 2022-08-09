@@ -52,3 +52,11 @@ async def root():
     board_array = predict_chesspieces(model, sliced_board)
     EchoService.echo(str(board_array))
     return str(board_array)
+
+
+@app.get("/save_samples")
+async def save_samples():
+    image_bytes = download_image()
+    corners = get_corners()
+    sliced_board = slice_image(corners, image_bytes)
+    return {'success': True}
