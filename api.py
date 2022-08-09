@@ -71,4 +71,4 @@ async def next_move_to_free_space():
     board_array = predict_chesspieces(model, sliced_board)
     y_free, x_free = get_random_free_space(board_array)
     y_pickup, x_pickup = get_random_pickup_space(board_array)
-    return str(x_free + y_free + x_pickup + y_pickup)
+    return f"{y_free, x_free, y_pickup, x_pickup}"
