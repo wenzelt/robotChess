@@ -18,6 +18,8 @@ from main import (
     get_random_pickup_space,
 )
 
+COUNTER = 32
+
 app = FastAPI()
 model = load_model("models/keras_all_classes_no_color.h5", compile=False)
 
@@ -78,3 +80,8 @@ async def next_move_to_free_space():
     y_free, x_free = get_random_free_space(board_array)
     y_pickup, x_pickup = get_random_pickup_space(board_array)
     return f"{x_pickup}{str(y_pickup)}{x_free}{str(y_free)}"
+
+
+@app.get("/counter")
+async def counter_state():
+    return COUNTER
