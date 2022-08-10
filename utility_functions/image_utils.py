@@ -6,6 +6,7 @@ import requests
 from keras.models import load_model
 
 from apiCheckApp.services import EchoService
+from utility_functions.board_functions import predict_chesspieces
 from utility_functions.corners import get_corners
 
 LOCAL = False

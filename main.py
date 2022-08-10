@@ -14,5 +14,3 @@ if __name__ == "__main__":
     EchoService.echo(str(board_array))
     y_free, x_free = get_random_free_space(board_array)
     y_pickup, x_pickup = get_random_pickup_space(board_array)
-    a = 1
-    # board_labelled = class_from_prediction(board_array)
