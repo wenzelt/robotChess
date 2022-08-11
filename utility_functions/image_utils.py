@@ -19,7 +19,7 @@ model = load_model("models/model_5000_blue_red.h5")
 def download_image(url="https://lab.bpm.in.tum.de/img/high/url") -> bytes:
     if LOCAL:
         with open(
-                "full_boards/chess_full2022-06-28 13:56:05.803477.png", "rb"
+            "full_boards/chess_full2022-06-28 13:56:05.803477.png", "rb"
         ) as image:
             f = image.read()
         return f
@@ -55,12 +55,12 @@ def slice_image(corner_coords, cam_image_in_bytes) -> list[list]:
     min_x, max_y = ld
     max_x, min_y = ru
 
-    img_cut = img[min_y - 10: max_y - 10, min_x - 10: max_x - 10]
+    img_cut = img[min_y - 10 : max_y - 10, min_x - 10 : max_x - 10]
     img_square = cv2.resize(img_cut, (square_pixel * 8, square_pixel * 8))
 
     field_images = [
         [
-            img_square[row: row + square_pixel, column: column + square_pixel, :]
+            img_square[row : row + square_pixel, column : column + square_pixel, :]
             for column in range(0, img_square.shape[1], square_pixel)
         ]
         for row in range(0, img_square.shape[0], square_pixel)

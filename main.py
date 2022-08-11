@@ -1,7 +1,11 @@
 from keras.models import load_model
 
 from apiCheckApp.services import EchoService
-from utility_functions.board_functions import predict_chesspieces, get_random_free_space, get_random_pickup_space
+from utility_functions.board_functions import (
+    predict_chesspieces,
+    get_random_free_space,
+    get_random_pickup_space,
+)
 from utility_functions.corners import get_corners
 from utility_functions.image_utils import download_image, slice_image
 
