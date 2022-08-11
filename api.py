@@ -1,3 +1,4 @@
+import json
 import logging
 import random
 import string
@@ -21,7 +22,8 @@ from utility_functions.image_utils import save_images_to_disk
 COUNTER = 32
 
 app = FastAPI()
-model = load_model("models/keras_all_classes_no_color.h5", compile=False)
+model = load_model("models/model_100_samples.h5", compile=False)
+empty_full_model = load_model("models/model_empty_full.h5", compile=False)
 
 # setup loggers
 logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
@@ -85,3 +87,15 @@ async def next_move_to_free_space():
 @app.get("/counter")
 async def counter_state():
     return COUNTER
+
+
+@app.get("/empty_full")
+async def get_empty_full():
+    logger.info("logging from the root logger")
+    EchoService.echo("Starting recognition Workflow")
+    image_bytes = download_image()
+    corners = get_corners()
+    sliced_board = slice_image(corners, image_bytes)
+    board_array = predict_chesspieces(empty_full_model, sliced_board)
+    EchoService.echo(str(board_array))
+    return json.dumps(board_array.tolist())
