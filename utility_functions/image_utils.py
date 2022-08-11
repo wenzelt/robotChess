@@ -86,6 +86,7 @@ def save_images_to_disk() -> None:
     flattened_list_predictions = [
         element for sublist in prediction_list for element in sublist
     ]
+
     counter = 0
     for i in x:
         if flattened_list_predictions[counter] != 0:

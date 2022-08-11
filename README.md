@@ -33,3 +33,12 @@ logger.error()
 ```
 EchoService.echo()
 ```
+
+#### Endpoints:
+```
+@app.get("/empty_full")
+@app.get("/counter")
+@app.get("/next_move_to_free_space")
+@app.get("/save_samples")
+@app.get("/")
+```
