@@ -56,14 +56,7 @@ async def log_requests(request: Request, call_next):
 
 @app.get("/")
 async def root():
-    logger.info("logging from the root logger")
-    EchoService.echo("Starting recognition Workflow")
-    image_bytes = download_image()
-    corners = get_corners()
-    sliced_board = slice_image(corners, image_bytes)
-    board_array = predict_chesspieces(model, sliced_board)
-    EchoService.echo(str(board_array))
-    return json.dumps(board_array.tolist())
+    return await predict_from_camera(model)
 
 
 @app.get("/save_samples")
@@ -91,11 +84,15 @@ async def counter_state():
 
 @app.get("/empty_full")
 async def get_empty_full():
+    return await predict_from_camera(empty_full_model)
+
+
+async def predict_from_camera(model):
     logger.info("logging from the root logger")
     EchoService.echo("Starting recognition Workflow")
     image_bytes = download_image()
     corners = get_corners()
     sliced_board = slice_image(corners, image_bytes)
-    board_array = predict_chesspieces(empty_full_model, sliced_board)
+    board_array = predict_chesspieces(model, sliced_board)
     EchoService.echo(str(board_array))
     return json.dumps(board_array.tolist())
