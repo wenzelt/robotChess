@@ -17,12 +17,12 @@ from main import (
     get_random_free_space,
     get_random_pickup_space,
 )
-from utility_functions.image_utils import save_images_to_disk
+from utility_functions.image_utils import save_images_to_disk, download_image_from_url
 
 COUNTER = 32
 
 app = FastAPI()
-model = load_model("models/model_100_samples.h5", compile=False)
+model = load_model("models/1000_samples.h5", compile=False)
 empty_full_model = load_model("models/model_empty_full.h5", compile=False)
 
 # setup loggers
@@ -85,6 +85,18 @@ async def counter_state():
 @app.get("/empty_full")
 async def get_empty_full():
     return await predict_from_camera(empty_full_model)
+
+
+@app.get("/get_from_url")
+async def predict_image_from_url(url: str):
+    logger.info("logging from the root logger")
+    EchoService.echo("Starting recognition Workflow")
+    image_bytes = download_image_from_url(url)
+    corners = get_corners()
+    sliced_board = slice_image(corners, image_bytes)
+    board_array = predict_chesspieces(model, sliced_board)
+    EchoService.echo(str(board_array))
+    return json.dumps(board_array.tolist())
 
 
 async def predict_from_camera(model):

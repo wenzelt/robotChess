@@ -4,7 +4,7 @@ import numpy as np
 from apiCheckApp.services import EchoService
 from fixtures.empty_chessboard import EMPTY_CHESSBOARD
 
-DRAW_CORNERS = False
+DRAW_CORNERS = True
 
 
 def get_corners():
